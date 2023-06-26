@@ -12,7 +12,7 @@ app.post("/api/users", async (req, res) => {
     try {
         res.json(await create(req));
     } catch (err) {
-        res.json({
+        res.status(500).json({
             message: err.message
         });
     }
@@ -32,7 +32,7 @@ app.get("/api/users/:id", async (req, res) => {
     try {
         res.json(await getById(req));
     } catch (err) {
-        res.json({
+        res.status(500).json({
             message: err.message
         });
     }
@@ -45,7 +45,7 @@ app.put("/api/users/:id", async (req, res) => {
             message: "As informações foram atualizadas"
         });
     } catch (err) {
-        res.json({
+        res.status(500).json({
             message: err.message
         });
     }
@@ -58,7 +58,7 @@ app.delete("/api/users/:id", async (req, res) => {
             message: "Usuário deletado"
         });
     } catch (err) {
-        res.json({
+        res.status(500).json({
             message: err.message
         });
     }

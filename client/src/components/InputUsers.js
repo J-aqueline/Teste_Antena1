@@ -9,15 +9,19 @@ const InputUsers = () => {
     const onSubmitForm = async e => {
         e.preventDefault();
         try {
-          const body = {name, email, age };
-          const response = await fetch("http://localhost:5000/api/users", {
+          const body = { name, email, age };
+          const request = await fetch("http://localhost:5000/api/users", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(body)
           });
-    
+
+          if (request.status === 500) {
+            const res = await request.json()
+            window.alert(res.message);
+          }
+
           window.location = "/";
-          console.log(response)
         } catch (err) {
           console.error(err.message);
         }
@@ -39,7 +43,7 @@ const InputUsers = () => {
                     <label for="age">Idade</label>
                     <input Type="number" className="form-control" value={age} onChange={e => setAge(e.target.value)}/>
                 </div>
-                <button type="button" class="btn btn-success">Adicionar</button>
+                <button className="btn btn-success">Adicionar</button>
             </form>
         </Fragment>
     );
