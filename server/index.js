@@ -15,7 +15,8 @@ app.post("/api/users", async(req,res) => {
         const newUser = await pool.query("INSERT INTO users (name, email, age) VALUES ($1,$2,$3) RETURNING *",
         [name, email, age]);
 
-        res.json(newUser.rows[0]); 
+        console.log("criando usuario", newUser.rows[0]);
+        res.json(newUser.rows[0]);
     } catch(err) {
         console.error(err.message);  
     }
@@ -24,6 +25,7 @@ app.post("/api/users", async(req,res) => {
 app.get("/api/users", async(req,res) => {
     try {
         const allUsers = await pool.query("SELECT * FROM users")
+        console.log("pegando todos", allUsers.rows);
         res.json(allUsers.rows)
     } catch (err) {
         console.error(err.message);
@@ -38,11 +40,28 @@ app.get("/api/users/:id", async(req,res) => {
             id
         ]);
 
+        console.log("pegando usuario pelo id", user.rows[0]);
         res.json(user.rows[0]);
     } catch (err) {
         console.error(err.message); 
     }
 })
+
+//update
+app.put("/api/users/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { name, email, age } = req.body;
+      await pool.query(
+        "UPDATE users SET name = $1, email = $2, age = $3 WHERE id = $4",
+        [name, email, age, id]
+      );
+  
+      res.json("As informações foram atualizadas");
+    } catch (err) {
+      console.error(err.message);
+    }
+  });
 
 //delete
 app.delete("/api/users/:id", async (req,res) => {
@@ -51,6 +70,7 @@ app.delete("/api/users/:id", async (req,res) => {
         const deleteUser = await pool.query("DELETE FROM users WHERE id = $1", [
             id
         ]);
+        console.log("deletando usuario", deleteUser);
         res.json("Usuário deletado.");
     } catch (err) {
         console.error(err.message);
