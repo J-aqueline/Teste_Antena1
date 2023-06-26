@@ -9,20 +9,20 @@ app.use(express.json()); //req.body
 //ROTAS
 
 // create
-app.post("/api/users", async(req,res) => {
+app.post("/api/users", async (req, res) => {
     try {
-        const {name, email, age} = req.body;
+        const { name, email, age } = req.body;
         const newUser = await pool.query("INSERT INTO users (name, email, age) VALUES ($1,$2,$3) RETURNING *",
-        [name, email, age]);
+            [name, email, age]);
 
         console.log("criando usuario", newUser.rows[0]);
         res.json(newUser.rows[0]);
-    } catch(err) {
-        console.error(err.message);  
+    } catch (err) {
+        console.error(err.message);
     }
 });
 //get all
-app.get("/api/users", async(req,res) => {
+app.get("/api/users", async (req, res) => {
     try {
         const allUsers = await pool.query("SELECT * FROM users")
         console.log("pegando todos", allUsers.rows);
@@ -33,9 +33,9 @@ app.get("/api/users", async(req,res) => {
 });
 
 //get byId
-app.get("/api/users/:id", async(req,res) => {
+app.get("/api/users/:id", async (req, res) => {
     try {
-        const {id} = req.params;
+        const { id } = req.params;
         const user = await pool.query("SELECT * FROM users WHERE id =$1", [
             id
         ]);
@@ -43,30 +43,30 @@ app.get("/api/users/:id", async(req,res) => {
         console.log("pegando usuario pelo id", user.rows[0]);
         res.json(user.rows[0]);
     } catch (err) {
-        console.error(err.message); 
+        console.error(err.message);
     }
 })
 
 //update
 app.put("/api/users/:id", async (req, res) => {
     try {
-      const { id } = req.params;
-      const { name, email, age } = req.body;
-      await pool.query(
-        "UPDATE users SET name = $1, email = $2, age = $3 WHERE id = $4",
-        [name, email, age, id]
-      );
-  
-      res.json("As informações foram atualizadas");
+        const { id } = req.params;
+        const { name, email, age } = req.body;
+        await pool.query(
+            "UPDATE users SET name = $1, email = $2, age = $3 WHERE id = $4",
+            [name, email, age, id]
+        );
+
+        res.json("As informações foram atualizadas");
     } catch (err) {
-      console.error(err.message);
+        console.error(err.message);
     }
-  });
+});
 
 //delete
-app.delete("/api/users/:id", async (req,res) => {
+app.delete("/api/users/:id", async (req, res) => {
     try {
-        const {id} = req.params;
+        const { id } = req.params;
         const deleteUser = await pool.query("DELETE FROM users WHERE id = $1", [
             id
         ]);

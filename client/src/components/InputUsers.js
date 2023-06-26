@@ -39,7 +39,7 @@ const InputUsers = () => {
                     <label for="age">Idade</label>
                     <input Type="number" className="form-control" value={age} onChange={e => setAge(e.target.value)}/>
                 </div>
-                <button className="btn btn-sucess">Adicionar</button>
+                <button type="button" class="btn btn-success">Adicionar</button>
             </form>
         </Fragment>
     );
